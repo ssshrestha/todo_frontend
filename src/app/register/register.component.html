@@ -1,0 +1,137 @@
+<h1 style="position: relative; left: 15%; width: 30%">
+  &nbsp; &nbsp; 
+</h1>
+<div style="text-align: center"></div>
+<div class="container  mx-auto">
+  <div class="card card0">
+    <div class="d-flex flex-lg-row flex-column-reverse">
+      <div class="card card1">
+        <div class="row justify-content-center my-auto">
+          <div class="col-md-8 col-10">
+            <div class="row justify-content-center">
+                <a routerLink='/'><img id="logo" src="https://dl.hiapphere.com/data/thumb/202101/com.tasks.android_HiAppHere_com_icon.png"></a>
+            </div>
+            <h1 style="color: #c76de3;">Welcome to Todo Tracker</h1>
+
+            <h3 class="msg-info" style="margin-left: -8px;">Register Yourself</h3>
+
+            <div class="form-group">
+              
+              <label class="form-control-label text-muted">Username</label>
+              <input
+                type="text"
+                
+                pattern="^[a-z \s]{8,15}$"
+                id="movieUser.username"
+                name="username"
+                placeholder="Enter Username"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-control-label text-muted">Email</label>
+              <input
+                type="email"
+                matInput
+                
+                placeholder="pat@example.com"
+              />
+              
+
+              
+                <div emailStatus></div>
+
+            </div>
+
+            <div class="form-group">
+              <label class="form-control-label text-muted">Password</label>
+              <input
+                type="password"
+                
+                pattern="^[A-Za-z0-9@*]{8,15}$"
+                id="movieUser.password"
+                name="password"
+                placeholder="Password"
+                class="form-control"
+              />
+              <!-- <mat-error
+                *ngIf="
+                  password.errors?.pattern && !password.hasError('required')
+                "
+              > -->
+                Please enter a valid Password Only @,* special
+                Chraracters,digits, (lowercase,uppercase Alphabets) are allowed
+              <!-- </mat-error>
+              <mat-error
+                *ngIf="password.hasError('required') && password.touched"
+              > -->
+                <!-- Password is <strong>required</strong>
+              </mat-error>
+            </div> -->
+
+            <div class="row justify-content-center my-3 px-3">
+              <button class="btn-block btn-color" >
+                Create New Account
+              </button>
+            </div>
+
+            <div
+              style="position: absolute; top: 49%; left: 32%"
+              class="row justify-content-center my-3 px-3"
+            >
+              <button class="btn-block btn-color" >
+                Email Availablity
+              </button>
+              <!-- {{availablity}} -->
+            </div>
+
+            <div class="row justify-content-center my-3 px-3">
+              <button
+                class="btn-block btn-color"
+                [routerLink]="['/login']"
+              >
+                Login
+              </button>
+            </div>
+
+            <!-- <div class="row justify-content-center my-2">
+                                    <a href="#"><small class="text-muted">Forgot Password?</small></a>
+                                </div> -->
+          </div>
+        </div>
+
+        <!-- <div class="col-md-6 col-lg-5 d-none d-md-block">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+            alt="login form"
+            class="img-fluid"
+            width="30%"
+            style="
+              border-radius: 1rem 0 0 1rem;
+              position: absolute;
+              left: 60%;
+              top: 5%;
+            "
+          />
+        </div> -->
+      </div>
+    </div>
+  </div>
+  </div>
+  
+</div>
+<div class="col-md-6 col-lg-7 d-none d-md-block">
+  <img
+    src="assets/images/signup.gif"
+    alt="login form"
+    class="img-fluid"
+    width="30%"
+    style="
+      border-radius: 1rem 1rem 1rem 1rem;
+      position: absolute;
+      left: 60%;
+      top: 5%;
+      height: 90%;
+    "
+  />

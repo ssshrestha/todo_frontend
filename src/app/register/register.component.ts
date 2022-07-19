@@ -27,7 +27,7 @@ availablity:any;
 task:Task=new Task(0,"","","","",new Date(),"");
  user1 : User = new User("","","","","");
 
-username = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z \s]{4,15}$')]);
+username = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z \s]{4,20}$')]);
 email = new FormControl('', [Validators.required, Validators.email]);
 password= new FormControl('', [Validators.required, Validators.pattern("^[A-Za-z0-9@*]{8,15}$")]);
 mobileNo = new FormControl('', [Validators.required, Validators.pattern("^[0-9]{10,12}$")]);
@@ -97,7 +97,7 @@ mobileNo = new FormControl('', [Validators.required, Validators.pattern("^[0-9]{
 			  }
 			  else {
 		  this.message='USER ALREADY EXIST,TRY ANOTHER EMAIL ID';
-		  this.toast.warning({detail:"ACCOUNT ALREADY EXIST WITH THIS EMAIL ID, TRY WITH ANOTHER ONE", summary:"",duration:3000})
+		  this.toast.error({detail:"ACCOUNT ALREADY EXIST WITH GIVEN EMAIL ID", summary:"",duration:5000})
 		  let re=this.service.addUser(this.user1);
 		  re.subscribe((data)=>{this.message=data;
 			console.log(data);
@@ -107,7 +107,8 @@ mobileNo = new FormControl('', [Validators.required, Validators.pattern("^[0-9]{
 			}
 			else{
 			this.message='CONGREGULATIONS!! YOUR ACCOUNT IS SUCCESSFULLY CREATED :';
-			this.toast.success({detail:"CONGRATULATIONS!! YOUR ACCOUNT IS SUCCESSFULLY CREATED", summary:"",duration:3000})
+			this.toast.success({detail:"CONGRATULATIONS!! YOUR ACCOUNT IS CREATED", summary:"",duration:4000})
+			this.router.navigate(['login']);
 		}
 		  }
 		  );

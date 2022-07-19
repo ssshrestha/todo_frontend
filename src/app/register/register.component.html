@@ -31,7 +31,7 @@
 
             <div class="form-group">
               <label class="form-control-label text-muted">Username</label>
-              <input type="text"  [(ngModel)]="user1.username" [formControl]="username" pattern="^[a-z \s]{8,15}$" id="username" name="username" placeholder="Enter Username" class="form-control">
+              <input type="text"  [(ngModel)]="user1.username" [formControl]="username" pattern="^[a-zA-Z \s]{4,20}$" id="username" name="username" placeholder="Enter Username" class="form-control">
               <mat-error *ngIf="username.hasError('pattern') && !username.hasError('required')">
                   Please enter a valid User Name </mat-error>
                 <mat-error *ngIf="username.hasError('required') &&  username.touched">
@@ -41,7 +41,7 @@
 
              <div class="form-group">
               <label class="form-control-label text-muted">Mobile Number</label>
-              <input type="password"  [(ngModel)]="user1.mobileNo" [formControl]="mobileNo" pattern="^[0-9]{10,12}$" id="mobileNo" name="password" placeholder="Ex-96....." class="form-control">
+              <input type="text"  [(ngModel)]="user1.mobileNo" [formControl]="mobileNo" pattern="^[0-9]{10,12}$" id="mobileNo" name="password" placeholder="Ex-96....." class="form-control">
               <mat-error *ngIf="mobileNo.hasError('pattern') && !mobileNo.hasError('required')">
                   Please enter a valid Mobile Number Only digits are allowed   </mat-error>
                 <mat-error *ngIf="mobileNo.hasError('required') &&  password.touched">
@@ -70,9 +70,9 @@
           </div>
 
          <img  src="{{messages.userImage}}" alt="" width="20%">
-          <div class="row justify-content-center my-3 px-3">
+          <!-- <div class="row justify-content-center my-3 px-3">
             <button class="btn-block btn-color" (click)="showUser()"> user Image </button>
-          </div>
+          </div> -->
 
             <div class="row justify-content-center my-3 px-3">
               <button class="btn-block btn-color" (click)="registerNow()" >

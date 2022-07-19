@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor() { }
+  constructor(public datepipe: DatePipe) { }
 
   ngOnInit(): void {
   }
+// date=new Date();
+//   myFunction(){
+//     this.date=new Date();
+//     let latest_date =this.datepipe.transform(this.date, 'yyyy-MM-dd');
+//     console.log(latest_date);
+//    }
 
 }

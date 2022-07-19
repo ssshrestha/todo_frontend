@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from '../user';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,6 @@ export class AuthserviceService {
 
     //LOGIN
     loginUser(user: any): Observable<any> {
-      this.userEmail = user.email;
       const url = 'http://localhost:9000/api/v1/login/';
       this.userEmail = user.email;
       return this.http.post<any>(url, user);

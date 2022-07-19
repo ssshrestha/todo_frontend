@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthserviceService } from '../services/authservice.service';
+import {NgToastService} from "ng-angular-popup"
+import { Router} from '@angular/router';
+import {FormBuilder,FormControl,FormGroup,Validators,} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +14,17 @@ export class LoginComponent implements OnInit {
     email:'',
     password:''
   }
+  loginForm!: FormGroup;
   
-  constructor(private authService:AuthserviceService) { }
+  constructor(private authService:AuthserviceService, private toast:NgToastService, private router:Router,formBuilder: FormBuilder) { 
+    // this.loginForm = formBuilder.group({
+    //   email: new FormControl(
+    //     '',
+    //     Validators.compose([Validators.email, Validators.required])
+    //   ),
+    //   password: new FormControl('', Validators.required),
+    // });
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -20,24 +32,22 @@ export class LoginComponent implements OnInit {
   initForm(){
   }
 
-  onSubmit(item:any){
-    console.table(item);
-    sessionStorage.setItem("email",this.credentials.email)
-    console.table(sessionStorage.getItem("email"));
-    if(this.credentials.email!='' && this.credentials.password!=''){
-      console.log("Submit form to server");
-      this.authService.generateTokenUsingLogin(this.credentials).subscribe(
-        (Response:any)=>{
-          console.log(Response.token);
-          this.authService.loginUserToken(Response.token);
-          window.location.href="/dashboard"
-        },error=>{
-          if (error.status == 404) {
-            window.alert('Invalid Password or Email.');
-          }
+  logInUser(item:any) {
+    this.authService.generateTokenUsingLogin(this.credentials).subscribe(
+      (response: any) => {
+        console.log(response);
+        sessionStorage.setItem("email",this.credentials.email)
+        console.log(sessionStorage.getItem("email"));
+        this.toast.success({detail:"Login Success", summary:"",duration:3000})
+        this.authService.loginUserToken(response.token);
+        this.router.navigate(['dashboard'])
+      },
+      (error) => {
+        if (error.status == 404) {
+          console.log("Login Fails")
+          this.toast.error({detail:"Login Fail", summary:"Please Check Your Credentials",duration:7000})
         }
-      )
-    }
+      }
+    );
   }
-
 }

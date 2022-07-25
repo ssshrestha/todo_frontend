@@ -8,7 +8,7 @@
   <div class="row">
    
       <div
-        class="input-group col-md-5 col-lg-5 col-sm-3 col-xs-3"
+        class="input-group col-md-5 col-lg-5 col-sm-4 col-xs-6"
         style="margin-left: 35%;"
       >
 
@@ -70,6 +70,7 @@
         >
           + Add Task
         </button>
+        
       </div>
     </div>
   </div>
@@ -107,14 +108,6 @@
 >
   Task By Date</button
 >&nbsp;&nbsp;
-<!-- <button
-  matTooltip="Sort Task By Date"
-  mat-raised-button
-  color="warn"
-  (click)="taskByDates()"
->
-  Sort Task By Date
-</button> -->
 
 <button mat-raised-button color="warn" [matMenuTriggerFor]="sort" > <mat-icon class="material-symbols-outlined">sort</mat-icon> Sort Tasks</button>&nbsp;&nbsp;
 <button mat-raised-button color="primary" matTooltip="Change View" (click)="changeView()" >View</button>
@@ -475,45 +468,45 @@
         <mat-icon matTooltip="Set Card Color" class="material-icons-outlined" color="primary">palette</mat-icon>
         </button>
         <mat-menu #beforeMenu12="matMenu" yPosition="below">
-          <button
+          <button style="background-color: aquamarine;"
             mat-menu-item
             (click)="changeAquamarine(task.taskId)"  
-        >Aquamarine
+        >
           </button>
-          <button
+          <button style="background-color: silver;"
             mat-menu-item
             (click)="changeSilver(task.taskId)"
-          >Silver
+          >
           </button>
-          <button
+          <button style="background-color: thistle;"
             mat-menu-item
             (click)="changeThistle(task.taskId)"
-          >Thistle
+          >
           </button>
-          <button
+          <button style="background-color: salmon;"
             mat-menu-item
             (click)="changeSalmon(task.taskId)"
-          >Salmon
+          >
           </button>
-          <button
+          <button style="background-color: plum;"
             mat-menu-item
             (click)="changePlum(task.taskId)"
-          >Plum
+          >
           </button>
-          <button
+          <button style="background-color: peachpuff;"
           mat-menu-item
           (click)="changePeachPuff(task.taskId)"
-        >PeachPuff
+        >
         </button>
-        <button
+        <button style="background-color: mistyrose;"
           mat-menu-item
           (click)="changeMistyRose(task.taskId)"
-        >MistyRose
+        >
         </button>
         <button
           mat-menu-item
           (click)="changeNoColor(task.taskId)"
-        >RemoveColor
+        >
         </button>
       </mat-menu>
 
@@ -619,5 +612,5 @@
 </div>
 
 <footer class="page-footer">
-  <pagination-controls [hidden]="totalLength<=9" class="text-center" (pageChange)="page=$event"></pagination-controls>
+  <pagination-controls [hidden]="totalLength<9" class="text-center" (pageChange)="page=$event"></pagination-controls>
 </footer>

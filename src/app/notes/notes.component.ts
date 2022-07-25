@@ -13,15 +13,24 @@ import { ImagetaskComponent } from '../imagetask/imagetask.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NgToastService } from 'ng-angular-popup';
 import { DeleteDialogService } from '../services/delete-dialog.service';
-import { dateInputsHaveChanged } from '@angular/material/datepicker/datepicker-input-base';
-import { DateAdapter } from '@angular/material/core';
-import { DateRange } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
-
+import { Sort } from '@angular/material/sort';
 
 export interface AllFruit1 {
   name: string;
 }
+
+export interface Dessert {
+  taskId:number;
+  taskTitle: string;
+  taskDescription: string;
+  taskImage:string;
+  priority: string;
+  date: Date;
+  category: string;
+  taskCardColor: string;
+}
+
 
 @Component({
   selector: 'app-notes',
@@ -43,6 +52,8 @@ message1:any;
 priority:any;
 priority_url:any;
 label:string[] = [];
+sortedData: Dessert[];
+
 
   constructor(private service:NotesService,private router:Router,public dialog: MatDialog,private toast:NgToastService
     ,private dialogService:DeleteDialogService,public datepipe: DatePipe) {  
@@ -54,6 +65,7 @@ label:string[] = [];
         startWith(null),
         map((fr: string | null) => (fr ? this._filter1(fr) : this.label)),
       );
+      this.sortedData = this.desserts.slice();
     }
 
     separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -62,7 +74,7 @@ label:string[] = [];
     filteredFruits: Observable<string[]> | undefined;
     filteredFruits1: Observable<string[]> | undefined;
     fruits: string[] = [];
-    allFruits: string[] = ['Home', 'work', 'Education', 'Personal','Health'];
+    allFruits: string[] = ['Home','Work','Office','Banking','Bill','Payment','Education','Personal','Health','Grocery','Miscellaneous'];
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>=new Input;
 
@@ -123,21 +135,51 @@ private _filter1(value: string): string[] {
   ngOnInit(): void {
     this.showTasks();
     var currentDate1 =new Date();
-    // console.log("date1 : "+this.currentDate);
-    // console.log("date2 : "+currentDate1);
-    // console.log("today date : "+this.myFunction(currentDate1));
     this.myFunction(this.currentDate);
     this.todayDate1= this.myFunction(this.currentDate);
-    let re=this.service.archiveCompletedTask(this.email);
-  re.subscribe((data)=> this.message3=data);
+    // let re=this.service.archiveCompletedTask(this.email);
+    // re.subscribe((data)=> this.message3=data);
 
   }
   
   addTitle = new FormControl('', [Validators.required]);
   addDes = new FormControl('', [Validators.required]);
 
+  desserts: Dessert[] = [];
+
 
   userData:any;
+  
+
+  sortData(sort: Sort) {
+    const data = this.desserts.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
+
+    this.message1 = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'date':
+          return compare(a.date, b.date, isAsc);
+        case 'priority':
+          return compare(a.priority, b.priority, isAsc);
+        case 'title':
+            return compare(a.taskTitle, b.taskTitle, isAsc);
+        case 'description':
+          return compare(a.taskDescription, b.taskDescription, isAsc); 
+        case 'category':
+            return compare(a.category, b.category, isAsc);   
+       
+        default:
+          return 0;
+      }
+    });
+  }
+
+
+
 
 
  showUserImage(){
@@ -186,18 +228,20 @@ submitData()
   re.subscribe((data)=>
   {this.message=data;
     this.success='Task Saved Successfully';
+    this.toast.success({detail:"Task Added", summary:"",duration:3000})
   })
 
   this.task1=new Task(0,"","","","",new Date(),"");
 }
-else{alert("Empty values Not Allowed");}
+else{this.toast.warning({detail:"Empty Task Can Not Set", summary:"",duration:3000})}
   this.showTasks();
   // onclick="document.location.reload=(true)"
   // this.router.navigateByUrl('/dashboard/notes');
 this.reloadCurrentRoute();
 }
 
-
+totalLength:any;
+page:number=1;
 state:boolean=false;
 showTasks()
 {
@@ -205,7 +249,20 @@ showTasks()
   re.subscribe((data)=> 
   {
     this.message1=data
-    // console.log(data);
+    this.totalLength=data.length;
+    for(var i=0;i<this.message1.length;i++){
+      this.desserts.push({
+        taskId: this.message1[i].taskId,
+          taskTitle: this.message1[i].taskTitle,
+          taskDescription: this.message1[i].taskDescription ,
+          taskImage: this.message1[i].taskImage,
+          priority: this.message1[i].priority,
+          date: this.message1[i].date,
+          category: this.message1[i].category,
+          taskCardColor:this.message1[i].taskCardColor
+        })
+ 
+    }
   });
 }
 
@@ -250,7 +307,9 @@ selectFile(event: any) {
 sumbitImage(taskId:any){
   console.log("task Id is : "+taskId);
   let re=this.service.setTaskImage(this.email,taskId,this.task1.taskImage);
+  this.toast.success({detail:"Task Image Added", summary:"",duration:3000})
   re.subscribe((data)=> this.message1=data);
+  this.toast.success({detail:"Task Image Added", summary:"",duration:3000})
   this.showTasks();
   this.reloadCurrentRoute();
 }
@@ -259,6 +318,7 @@ deleteImage(taskId:any){
   console.log("task Id is : "+taskId);
   let re=this.service.removeTaskImage(this.email,taskId);
   re.subscribe((data)=> this.message1=data);
+  this.toast.success({detail:"Task Image Deleted", summary:"",duration:3000})
   this.showTasks();
   this.reloadCurrentRoute();
   
@@ -268,6 +328,7 @@ deleteLabel(taskId:any){
   console.log("task Id is : "+taskId);
   let re=this.service.removeTaskCaegory(this.email,taskId);
   re.subscribe((data)=> this.message1=data);
+  this.toast.success({detail:"Task Label Deleted", summary:"",duration:3000})
   this.showTasks();
   this.reloadCurrentRoute();
 }
@@ -295,6 +356,7 @@ updateUserTask1(){
   console.log("task Id is : "+this.taskId1);
   let re=this.service.updateTask(this.email,this.taskId1,this.task1);
   re.subscribe((data)=> this.message1=data);
+  this.toast.success({detail:"Task Updated", summary:"",duration:3000})
   this.showTasks();
   this.reloadCurrentRoute();
 }
@@ -302,13 +364,6 @@ updateUserTask1(){
 
 deleteTasks(taskId:any)
 {
-  // let re=this.service.deleteTask(this.email,taskId);
-  // re.subscribe((data)=> this.message1=data);
-  // this.reloadCurrentRoute();
-  // this.ngOnInit();
-  // alert("Task Deleted");
-//   if(this.state==true){
-//  this.deleteTasks(taskId);
        this.dialogService.openConfirmDialog('Are you sure to delete this task?')
        .afterClosed().subscribe(res =>{
         console.log(res)
@@ -330,6 +385,18 @@ archiveTasks(taskId:any)
   this.reloadCurrentRoute();
   this.ngOnInit();
   this.toast.success({detail:"Task Archieved", summary:"",duration:3000})
+  if(this.state==true){
+ this.deleteTasks(taskId);
+  }
+}
+
+hideTasks(taskId:any)
+{
+  let re=this.service.archiveTask(this.email,taskId);
+  re.subscribe((data)=> this.message1=data);
+  this.reloadCurrentRoute();
+  this.ngOnInit();
+  this.toast.success({detail:"Task Hidden", summary:"",duration:3000})
   // alert("Task Archived");
   if(this.state==true){
  this.deleteTasks(taskId);
@@ -361,18 +428,21 @@ home(label:any,taskId:any){
   let re=this.service.setTaskCategory(this.email,taskId,label);
   re.subscribe((data)=> this.message1=data);
   console.log("label : "+label);
+  this.toast.success({detail:"Label Set", summary:"",duration:3000})
   this.reloadCurrentRoute();
 }
 
 education(label:any,taskId:any){
   let re=this.service.setTaskCategory(this.email,taskId,label);
   re.subscribe((data)=> this.message1=data);
+  this.toast.success({detail:"Label Set", summary:"",duration:3000})
   this.reloadCurrentRoute();
 }
 
 work(label:any,taskId:any){
   let re=this.service.setTaskCategory(this.email,taskId,label);
   re.subscribe((data)=> this.message1=data);
+  this.toast.success({detail:"Label Set", summary:"",duration:3000})
   this.reloadCurrentRoute();
 }
 
@@ -401,12 +471,53 @@ taskByDates(){
 
 datecheck:any;
   myFunction(date:Date){
-    // date.getDate()
-    // console.log(date);
     let latest_date =this.datepipe.transform(date, 'yyyy-MM-dd');
     this.datecheck=latest_date;
-    // console.log(latest_date);
    }
+
+   label1(category1: MatAutocompleteSelectedEvent){
+    console.log(category1.option.viewValue);
+    let re=this.service.categorization(this.email,category1.option.viewValue);
+    re.subscribe((data)=>{ 
+      console.log(data);
+      this.message1=data;
+  
+    });
+  }
+  
+
+   category2:any='Search Task.....';
+   search(priority:any) {
+     this.category2=priority;
+      console.log(this.category1);
+    }
+
+   searchbyPriority(priority:any) {
+    this.category1=priority;
+    this.category2=priority;
+     console.log(this.category1);
+     this.category(priority);
+   }
+   
+   sortTaskByDates(){
+     let re=this.service.sortTaskByDates(this.email);
+     re.subscribe((data)=>{ 
+       console.log(data);
+       console.log(data);
+       this.message1=data;
+     });
+   }
+   
+   sortTaskByPriority(order:any){
+     let re=this.service.sortTaskByPriority(this.email,order);
+     re.subscribe((data)=>{ 
+       console.log(data);
+       console.log(data);
+       this.message1=data;
+   
+     });
+   }
+   
 
 searchTaskByDates(date:Date){
   console.log(date);
@@ -424,11 +535,87 @@ searchTaskByDates(date:Date){
   });
 }
 
-
 openDialog(taskId:any){
   this.taskId=taskId;
   console.log(this.taskId);
   localStorage.setItem("setTaskId", taskId)
   this.dialog.open(ImagetaskComponent)
 }
+
+//color
+isTrue:string='';
+taskIds:any;
+colors:any;
+colors1:any;
+
+changeSilver(id:any) {
+  this.taskIds=id;
+  this.colors='#E0FCF5 '
+  this.setcardColors('Silver',id);
+ this.reloadCurrentRoute();
+}
+
+changeAquamarine(id:any) {
+  this.taskIds=id;
+  this.colors='pink'
+ this.setcardColors('aquamarine',id);
+ this.reloadCurrentRoute();
+}
+
+changeThistle(id:any) {
+ this.taskIds=id;
+ this.colors='#FD5A7D';
+ this.setcardColors('Thistle',id);
+ this.reloadCurrentRoute();
+}
+changeSalmon(id:any) {
+  this.taskIds=id;
+  this.colors  = "#F1FEB6";
+  this.setcardColors('Salmon',id);
+  this.reloadCurrentRoute();
+}
+changePlum(id:any) {
+  this.taskIds=id;
+  this.colors= "#FAFE98";
+  this.setcardColors('Plum',id);
+  this.reloadCurrentRoute();
+}
+changePeachPuff(id:any) {
+  this.taskIds=id;
+  this.setcardColors('PeachPuff',id);
+  this.reloadCurrentRoute();
+}
+changeMistyRose(id:any) {
+  this.taskIds=id;
+  this.setcardColors('MistyRose',id);
+  this.reloadCurrentRoute();
+}
+changeNoColor(id:any) {
+  this.taskIds=id;
+  this.setcardColors('White',id);
+  this.reloadCurrentRoute();
+}
+
+setcardColors(color:any,taskId:any)
+{
+  let re=this.service.setTaskColor(this.email,taskId,color);
+  re.subscribe((data)=>{ 
+   console.log(data);
+    this.message1=data;
+  });
+}
+change:any=0;
+changeView(){
+  if(this.change==0){
+  this.change=1;}
+  else if(this.change==1){
+    this.change=0;
+  }
+}
+
+}
+
+
+function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

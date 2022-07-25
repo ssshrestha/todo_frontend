@@ -50,7 +50,7 @@
 
             <div class="form-group">
               <label class="form-control-label text-muted">Email</label>
-              <input type="email" matInput [(ngModel)]="user1.email"  [formControl]="email" placeholder="Ex. pat@example.com">
+              <input type="email" matInput [(ngModel)]="user1.email"  [formControl]="email" placeholder="Email">
               <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
                 Please enter a valid email address </mat-error>
               <mat-error *ngIf="email.hasError('required')  &&  email.touched">

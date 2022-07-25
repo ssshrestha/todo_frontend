@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import { NotesService } from '../services/notes.service';
 
 @Component({
@@ -8,8 +9,8 @@ import { NotesService } from '../services/notes.service';
   styleUrls: ['./upload-image.component.css']
 })
 export class UploadImageComponent implements OnInit {
-  email:any="admin@gmail.com";
-  constructor(private service:NotesService, private router:Router) { }
+  email:any=sessionStorage.getItem("email");
+  constructor(private service:NotesService, private router:Router,private toast:NgToastService) { }
 
   ngOnInit(): void {
   }
@@ -46,6 +47,7 @@ export class UploadImageComponent implements OnInit {
       console.log("task Id is : "+this.url1);
       let re=this.service.setUserImage(this.email,this.url1);
       re.subscribe((data)=> this.message1=data);
+      this.toast.success({detail:"Profile Picture Changed", summary:"",duration:3000})
       this.reloadCurrentRoute();
     }
 

@@ -37,8 +37,12 @@ import {MatInputModule} from '@angular/material/input';
 import {MatNativeDateModule} from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { ChangePasswordComponent } from './change-password/change-password.component';
-import { ReminderComponent } from './reminder/reminder.component'
+import { ReminderComponent } from './reminder/reminder.component';
 import {MatRippleModule} from '@angular/material/core';
+import { NgxPaginationModule } from 'ngx-pagination';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatSortModule} from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,7 @@ import {MatRippleModule} from '@angular/material/core';
     LoginComponent,
     RegisterComponent,
     MainComponent,DashboardComponent,NotesComponent,ArchiveComponent, UploadImageComponent, 
-    ImagetaskComponent, DeleteDialogComponent, ChangePasswordComponent, ReminderComponent
+    ImagetaskComponent, DeleteDialogComponent, ChangePasswordComponent, ReminderComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,8 @@ import {MatRippleModule} from '@angular/material/core';
     MatIconModule,MatMenuModule,MatSidenavModule,MatListModule,MatDividerModule,MatChipsModule,
     MatFormFieldModule,MatButtonModule,MatButtonToggleModule,MatCardModule,MatCheckboxModule,
     NgToastModule,MatSelectModule,MatAutocompleteModule,MatDialogModule,MatTooltipModule,
-    MatDatepickerModule,MatInputModule,MatNativeDateModule,MatRippleModule
+    MatDatepickerModule,MatInputModule,MatNativeDateModule,MatRippleModule,MatSortModule,
+    NgxPaginationModule,MatSlideToggleModule,MatBadgeModule
 
   ],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:TokenInterceptorService,multi:true},DatePipe],

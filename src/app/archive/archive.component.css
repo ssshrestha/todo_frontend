@@ -12,3 +12,7 @@
     margin: 1%;
     margin-left: 4%;
 }
+
+[hidden] {
+    display: none !important;
+  }

@@ -12,8 +12,8 @@ export class ArchiveService {
     return this.http.post("http://localhost:9000/api/v4/unArchive/"+archiveId,{responseType:'text' as 'json'});
   }
 
-  public showArchive(){
-    return this.http.get("http://localhost:9000/api/v4/showArchive/",{responseType:'json' as 'text'});
+  public showArchive(email:any){
+    return this.http.get("http://localhost:9000/api/v4/showArchive/"+email,{responseType:'json' as 'text'});
   }
 
   public deleteTask(archiveId:any){

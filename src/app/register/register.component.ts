@@ -73,10 +73,9 @@ mobileNo = new FormControl('', [Validators.required, Validators.pattern("^[0-9]{
 		re.subscribe((data)=>this.message=data);
 		console.log(this.message);
 		this.messages.userImage=this.message.userImage;
-		this.toast.success({detail:"Registration Success", summary:"",duration:3000})
-		console.log("value of messages.userImage is : "+this.messages.userImage);
-		this.router.navigate(['/login'])
-
+		// this.toast.success({detail:"Registration Success", summary:"",duration:3000})
+		// console.log("value of messages.userImage is : "+this.messages.userImage);
+		// this.router.navigate(['/login'])
 	}
 
 	public registerNow(){
@@ -97,7 +96,7 @@ mobileNo = new FormControl('', [Validators.required, Validators.pattern("^[0-9]{
 			  }
 			  else {
 		  this.message='USER ALREADY EXIST,TRY ANOTHER EMAIL ID';
-		  this.toast.error({detail:"ACCOUNT ALREADY EXIST WITH GIVEN EMAIL ID", summary:"",duration:5000})
+	       this.toast.error({detail:"ACCOUNT ALREADY EXIST WITH GIVEN EMAIL ID", summary:"",duration:5000})
 		  let re=this.service.addUser(this.user1);
 		  re.subscribe((data)=>{this.message=data;
 			console.log(data);
@@ -106,8 +105,8 @@ mobileNo = new FormControl('', [Validators.required, Validators.pattern("^[0-9]{
 			  alert('empty Fields not allowed ');
 			}
 			else{
-			this.message='CONGREGULATIONS!! YOUR ACCOUNT IS SUCCESSFULLY CREATED :';
-			this.toast.success({detail:"CONGRATULATIONS!! YOUR ACCOUNT IS CREATED", summary:"",duration:4000})
+			this.message='CONGRATULATIONS! YOUR ACCOUNT IS SUCCESSFULLY CREATED :';
+			this.toast.success({detail:"CONGRATULATIONS! YOUR ACCOUNT IS CREATED", summary:"",duration:4000})
 			this.router.navigate(['login']);
 		}
 		  }

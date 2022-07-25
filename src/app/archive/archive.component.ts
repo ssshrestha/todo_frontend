@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import { ArchiveService } from '../services/archive.service';
 
 @Component({
@@ -11,12 +12,14 @@ export class ArchiveComponent implements OnInit {
 
   archiveData:any;
   centered = false;
-  constructor(private service:ArchiveService,private router:Router) { }
+  email:any=sessionStorage.getItem("email");
+
+  constructor(private service:ArchiveService,private router:Router,private toast:NgToastService) { }
 
   ngOnInit(): void {
-    // this.showArchiveList();
-    console.log(this.archiveData);
-    console.log(this.showArchiveList());
+    this.showArchiveList()
+    // console.log(this.archiveData);
+    // console.log(this.showArchiveList());
   }
 
   reloadCurrentRoute() {
@@ -25,30 +28,31 @@ export class ArchiveComponent implements OnInit {
         this.router.navigate([currentUrl]);
     });}
 
+    totalLength:any;
+    page:number=1;
   showArchiveList(){
-    let re=this.service.showArchive();
+    let re=this.service.showArchive(this.email);
     re.subscribe((data:any)=>{ 
-      // console.log("inside fn"+data);
       this.archiveData=data;
+      this.totalLength=data.length;
     });
-   
   }
 
   unArchive(archiveId: any){
     let re=this.service.UnArchiveTask(archiveId);
     re.subscribe((data:any)=>{ 
-      // console.log("inside fn"+data);
       this.archiveData=data;
     });
+    this.toast.success({detail:"Task Unarchieved", summary:"",duration:3000})
     this.reloadCurrentRoute();
   }
 
   deleteTask(archiveId: any){
     let re=this.service.deleteTask(archiveId);
     re.subscribe((data:any)=>{ 
-      // console.log("inside fn"+data);
       this.archiveData=data;
     });
+    this.toast.success({detail:"Archieved Task Deleted", summary:"",duration:3000})
     this.reloadCurrentRoute();
   }
 

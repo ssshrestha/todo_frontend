@@ -28,11 +28,16 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    sessionStorage.setItem('allowNotification','1');
   }
   initForm(){
   }
 
   logInUser(item:any) {
+    if(this.credentials.email=='' && this.credentials.password==''){
+      this.toast.error({detail:"Login Details Required", summary:"Please Fill The Login Credentials",duration:7000})
+    }
+    else{
     this.authService.generateTokenUsingLogin(this.credentials).subscribe(
       (response: any) => {
         console.log(response);
@@ -43,11 +48,11 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['dashboard'])
       },
       (error) => {
-        if (error.status == 404) {
+        if (error.status == 404 || error.staus ==400) {
           console.log("Login Fails")
           this.toast.error({detail:"Login Fail", summary:"Please Check Your Credentials",duration:7000})
         }
       }
-    );
+    );}
   }
 }

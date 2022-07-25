@@ -6,6 +6,7 @@ import { NotesService } from '../services/notes.service';
 import { UploadImageComponent } from '../upload-image/upload-image.component';
 import { User } from '../user';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { NgToastService } from 'ng-angular-popup';
 
 
 
@@ -16,16 +17,22 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
 })
 export class DashboardComponent implements OnInit {
   
-  constructor(private service:NotesService,private router:Router,public dialog: MatDialog,private authService:AuthserviceService) {
+  constructor(private service:NotesService,private router:Router,public dialog: MatDialog,private authService:AuthserviceService,private toast:NgToastService) {
     
   }
 
   user:User = new User("","","","","");
+  message3:any='';
+  allowAutoCompletion:any=1;
 
   ngOnInit(): void {
     this.messages.userImage='assets/images/default.png';
     this.showUserImage();
+    console.log("Enable check : "+sessionStorage.getItem('allowNotification'));
+    if(sessionStorage.getItem('allowNotification')=='1'){
+    this.checkCompletion();}
   }
+
   events: string[] = [];
   opened: boolean | undefined;
   email:any=sessionStorage.getItem("email");
@@ -38,7 +45,44 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
     });
+  }
+
+  enableAutoCompletion(){
+    console.log(sessionStorage.getItem('allowNotification'));
+    
+    if(sessionStorage.getItem('allowNotification')=='0'){
+  this.allowAutoCompletion=1;
+  sessionStorage.removeItem('allowNotification');
+  sessionStorage.setItem('allowNotification','1');
+  this.checkCompletion();
+  console.log(this.allowAutoCompletion);
+this.toast.success({detail:"Completed Task Auto Archive Enabled ", summary:"" ,duration:3000});
+
 }
+  else if(sessionStorage.getItem('allowNotification')=='1'){
+    this.allowAutoCompletion=0;
+    sessionStorage.removeItem('allowNotification');
+  sessionStorage.setItem('allowNotification','0');
+    this.toast.success({detail:"Completed Task Auto Archive Disabled ", summary:"" ,duration:3000});
+    console.log(this.allowAutoCompletion);
+  }
+  console.log(sessionStorage.getItem('allowNotification'));
+  this.reloadCurrentRoute();
+  }
+
+  checkCompletion(){
+    let re=this.service.archiveCompletedTask(this.email);
+    re.subscribe((data)=> {
+   this.message3=data;
+    for(var i=0;i<this.message3.length;i++){
+     console.log("task "+this.message3[i].taskTitle+"is completed and moved to archive");
+     console.log("task description is : "+this.message3[i].taskDescription);
+      alert("task "+this.message3[i].taskTitle+" completed");
+}
+});
+
+}
+
 
   showUserImage(){
     this.messages.userImage='assets/images/default.png';
@@ -88,9 +132,10 @@ category1:any='';
       }}
       url1:any
     sumbitImage1(){
-      console.log("task Id is : "+this.url1);
+      // console.log("task Id is : "+this.url1);
       let re=this.service.setUserImage(this.email,this.url1);
       re.subscribe((data)=> this.message1=data);
+      this.toast.success({detail:"Profile Picture Changed", summary:"",duration:3000})
       this.showUserImage();
       this.reloadCurrentRoute();
     }
@@ -106,7 +151,10 @@ category1:any='';
 
     logoutUser(){
       this.authService.logout()
-      window.location.href='login'
+      sessionStorage.removeItem('allowNotification')
+      sessionStorage.setItem('allowNotification','1')
+      this.toast.success({detail:"User Logged Out", summary:"",duration:3000})
+      this.router.navigate(["login"])
     }
 
     doRoute(){

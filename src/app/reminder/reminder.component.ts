@@ -15,10 +15,14 @@ export class ReminderComponent implements OnInit {
   }
   email=sessionStorage.getItem("email");
   message:any;
+
+  totalLength:any;
+page:number=1;
  todayTask(){
   let re=this.service.todayTask(this.email);
   re.subscribe((data)=>{ 
     this.message=data;
+    this.totalLength=data.length;
   });
   
 }

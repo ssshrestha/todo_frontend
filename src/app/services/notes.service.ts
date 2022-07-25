@@ -76,6 +76,11 @@ export class NotesService {
     return this.http.get("http://localhost:9000/api/v5//showSortedTaskListByDates/"+email,{responseType:'json' as 'text'});
   }
 
+  public sortTaskByPriority(email:any,order:any)
+  {
+    return this.http.get("http://localhost:9000/api/v5/sortByPriority/"+email+"/"+order,{responseType:'json' as 'text'});
+  }
+
   public searchTaskByDates(email:any,date:any)
   {
     return this.http.get("http://localhost:9000/api/v5/searchTaskByDates/"+email+"/"+date,{responseType:'json' as 'text'});
@@ -90,6 +95,12 @@ export class NotesService {
   {
     return this.http.post("http://localhost:9000/api/v3/archiveCompletedTask/"+email,{responseType:'json' as 'text'});
   }
+
+  public setTaskColor(email:any,taskId:number,color:any)
+  {
+    return this.http.put("http://localhost:9000/api/v3/addTaskColor/"+email+"/"+taskId+"/"+color,{responseType:'json' as 'text'});
+  }
+
   
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotesService } from '../services/notes.service';
 import { Task } from 'src/app/task';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-imagetask',
@@ -16,7 +17,7 @@ message1:any;
 msg:any;
 email=sessionStorage.getItem("email");
 
-  constructor(private service:NotesService,private router:Router) { }
+  constructor(private service:NotesService,private router:Router,private toast:NgToastService) { }
 
   ngOnInit(): void {
   this.showTasks();
@@ -65,6 +66,7 @@ email=sessionStorage.getItem("email");
   sumbitImage(){
     let re=this.service.setTaskImage(this.email,localStorage.getItem("setTaskId"),this.url);
     re.subscribe((data)=> this.message1=data);
+    this.toast.success({detail:"Task Image Added", summary:"",duration:3000})
     this.reloadCurrentRoute();
   }
 

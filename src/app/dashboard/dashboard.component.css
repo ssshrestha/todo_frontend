@@ -60,3 +60,29 @@
     margin-left: 15%;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+  
+  .navbar {
+     height: 60px;
+    /*width: 100%; */
+    
+    /* display:inline !important; */
+    background-color: #3f51b5;
+    margin-bottom: 2%;
+    
+  }
+  
+  .dark-mode {
+    background-color: black;
+    color: white;
+  }

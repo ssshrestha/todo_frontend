@@ -1,24 +1,60 @@
 
 <div  class="row">
-  <div style="margin-top: 6%; margin-left: 20%;" *ngIf="archiveData==''">
+  <div style="margin-top: 6%; margin-left: 20%;" *ngIf="archiveData==null || archiveData=='' ">
     <img src="assets/images/allclear.png" alt="No Archieved Task" width="80%" height="80%">
  </div>
-  <mat-card class="example-card" *ngFor="let task of archiveData">
+ <!-- <div *ngIf="archiveData==''" style="margin-left: 45%; margin-top: 16%;">
+  <h1> <mat-icon class="material-icons-outlined">archive</mat-icon>
+    Your Archived Notes Appear Here</h1>
+    </div> -->
+  <mat-card class="example-card" *ngFor="let task of archiveData | paginate:{itemsPerPage:12, currentPage:page, totalItems:totalLength}" style="background-color:{{task.taskCardColor}}">
   
-      <mat-card-title> {{task.task.taskTitle}}</mat-card-title>
-       <mat-card-subtitle> {{task.task.taskDescription}}  </mat-card-subtitle>
-      <img mat-card-image src="{{task.task.taskImage}}">
-      <mat-card-subtitle> {{task.task.date}}  </mat-card-subtitle>
+      <mat-card-title> {{task.taskTitle}}
+        
+            <img
+              matTooltip="Priority"
+              src="assets/images/{{task.priority}}.png"
+              alt=""
+              width="10%"
+              style="margin-left: 5%; position: relative"
+            />
+        </mat-card-title>
+
+
+      
+       <mat-card-subtitle> {{task.taskDescription}}  </mat-card-subtitle>
+      <img mat-card-image src="{{task.taskImage}}">
+
+      <mat-chip-list matTooltip="Task Category"
+        *ngIf="task.category != ''"
+        #chipList
+        aria-label="Fruit selection"
+      >
+      <mat-chip  >
+        {{task.category}}
+      </mat-chip>
+    </mat-chip-list>
+    <br />
+
+
+
+      <mat-card-subtitle matTooltip="Task Date"> {{task.date}}  </mat-card-subtitle>
+
+
+
       <mat-card-actions>
-        <button
+        <button style="margin-left: 25%;"
           mat-button
           matTooltip="Unarchieve Task"  color="primary"
-          (click)="unArchive(task.archiveId)"
+          (click)="unArchive(task.taskId)"
         >
           <mat-icon class="material-icons-outlined">unarchive</mat-icon>
         </button>
       
-        <button mat-button color="warn" (click)="deleteTask(task.archiveId)"><mat-icon class="material-icons-outlined" matTooltip="Delete Archieved Task">delete</mat-icon></button> 
+        <button mat-button color="warn" (click)="deleteTask(task.taskId)"><mat-icon class="material-icons-outlined" matTooltip="Delete Archieved Task">delete</mat-icon></button> 
       </mat-card-actions>
     </mat-card>
   </div>
+  <footer class="page-footer">
+    <pagination-controls [hidden]="totalLength<=13" class="text-center" (pageChange)="page=$event"></pagination-controls>
+  </footer>
